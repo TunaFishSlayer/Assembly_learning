@@ -1,7 +1,7 @@
 .data
 	Message: .asciiz "Type the ticket number:"
-	Lucky: .asciiz "This ticket is lucky"
-	Unlucky: .asciiz "This ticket is unlucky"
+	Lucky: 	 .asciiz "This ticket is lucky"
+	Unlucky: .asciiz "This ticket is not lucky"
 	string: .space 50
 .text
 # Read the ticket number
