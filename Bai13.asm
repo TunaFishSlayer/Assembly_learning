@@ -1,5 +1,6 @@
 .data
 	Message: .asciiz "Type the ticket number:"
+	Invalid: .asciiz "This ticket number is invalid"
 	Lucky: 	 .asciiz "This ticket is lucky"
 	Unlucky: .asciiz "This ticket is not lucky"
 	string: .space 50
@@ -22,7 +23,10 @@ end_string_length_loop:
 	la $t1 string				# $t1 = address(string[0])
 	sub $s0,$t0,$t1				# $s0 = address(\0) - address(string[0]) = length of the string with null character
 	addi $s0,$s0,-1				# $s0 now contains the length of the string
-
+	addi $t2,$t2,2				# Check if the number of digits in the ticket number is even or not
+	div $s0,$t2
+	mfhi $t3
+	bne $t3,0,invalid			# Branch if not even
 #----------------------------------
 # Algorithm idea in C++: Calculate the sum of the first half and second half of the ticket number then compare them
 # int front,back=string_size;
@@ -67,7 +71,11 @@ equal:
 	li $v0, 55
  	la $a0, Lucky		# Print lucky message
  	syscall
- 	
+ 	j exit_program
+invalid:
+	li $v0, 55
+ 	la $a0, Invalid		# Print invalid message
+ 	syscall 	
 # Exit 	
 exit_program:
 	li $v0, 10 		#exit
