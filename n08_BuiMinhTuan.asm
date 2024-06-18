@@ -57,7 +57,7 @@ error1: li $v0, 4
 
 #-------------------------------ket thuc kiem tra do dai----------------------------------
 
-#------------------------in gia tri atity bang Hexa----------------------------
+#------------------------in gia tri patity bang Hexa----------------------------
 # Minh hoa thuat toan: vi du gia tri t8=15 dich phai 4 bit thu duoc 1, lay byte cuoi cung thi thu duoc 5
 #
 HEX:	la $t4, hexadecimal
@@ -84,25 +84,31 @@ print_title:
 	li $v0, 4
 	la $a0, m1
 	syscall
+	
 	li $v0, 4
 	la $a0, m2
 	syscall
+	
 split1:	addi $t0, $zero, 0	# so byte duoc in ra (4 byte)
 	addi $t9, $zero, 0
 	addi $t8, $zero, 0
 	la $s1, d1
 	la $s2, d2
 	la $a2, array
-print11:li $v0, 4
+print11:
+	li $v0, 4
 	la $a0, m3
 	syscall
-b11:	lb $t1, 0($s0)		# t1 = input[0]
+	
+b11:	lb $t1, 0($s0)		# t1 = input[i]
 	addi $t3, $t3, -1	# t3 = length; length --;
 	sb $t1, ($s1)		# luu vao disk 1
+	
 b21:	add $s5, $s0, 4
-	lb $t2, ($s5)		# t2 chua dia chi tung byte cua disk 2
+	lb $t2, ($s5)		# t2 = input[i+4]
 	addi $t3, $t3, -1	# t3 = length; length --;
 	sb $t2, ($s2)
+	
 b31:	xor $a3, $t1, $t2	# tinh parity
 	sw $a3, ($a2)		
 	addi $a2, $a2, 4	# tang den 4 byte tiep theo cua mang array
@@ -112,6 +118,7 @@ b31:	xor $a3, $t1, $t2	# tinh parity
 	addi $s2, $s2, 1	# tang den byte tiep trong disk2
 	bgt $t0, 3, reset
 	j b11
+	
 reset:	la $s1, d1		# dat lai gai tri s1 va s2 lan luot len vi tri dau tien cua disk1 va disk2
 	la $s2, d2
 print12:lb $a0, ($s1)		# in tung gia tri disk1
@@ -236,7 +243,7 @@ end2:	li $v0, 4
 	la $a0, enter
 	syscall
 	beq $t3, 0, exit1
-#----------------lan 2: luu vao 2 khoi 2,3; xor vao 1---------------------------
+#----------------lan 3: luu vao 2 khoi 2,3; xor vao 1---------------------------
 split3:	la $a2, array
 	la $s2, d2
 	la $s3, d3
@@ -325,8 +332,8 @@ exit1:	li $v0, 4
 #-------------------------------ket thuc mo phong RAID 5-------------------------------
 
 #-------------------------------------thu lai------------------------------------------
-wait:   li $v0,32		# sleep 5000ms
-	li $a0,5000
+wait:   li $v0,32		# sleep 2000ms
+	li $a0,2000
 	syscall
 	
 ask:	li $v0, 50		# in thong bao hoi thu lai
